@@ -148,6 +148,13 @@ class MyLinkedHashMap<K,V>{
         Node<K,V> newnode= linkedList1.search(key);
         return (newnode==null)?null:newnode.getValue();
     }
+    void remove(K key){
+        int index=this.getBucketIndex(key);
+
+           this.myBucketArray.remove(index);
+
+
+    }
 
 
     @Override
@@ -201,6 +208,7 @@ class LinkedList1<K>{
 
     }
 
+
     Node search(K key){
         Node tempNode=head;
         while (tempNode!=null && tempNode.getNext()!=null){
@@ -227,10 +235,6 @@ class LinkedList1<K>{
 
 public class HashTable {
     public static void main(String[] args){
-
-
-
-
 
         String line="To be or not to be";
 
@@ -282,6 +286,8 @@ public class HashTable {
 
 
         }
+        linkedHashMap.remove("are");
+
 
 
 
@@ -290,7 +296,6 @@ public class HashTable {
 
 
 
+
     }
 }
-
-
