@@ -1,3 +1,6 @@
+
+import java.util.ArrayList;
+
 class Node<K,V> {
     K key;
     V value;
@@ -39,7 +42,7 @@ class Node<K,V> {
         return "Node{" +
                 "key=" + key +
                 ", value=" + value +
-                ", next=" + next +
+
                 '}';
     }
 }
@@ -75,6 +78,83 @@ class MyHashMap<K,V> {
     public String toString() {
         return "MyHashMap{" +
                 "linkedList1=" + linkedList1 +
+                '}';
+    }
+}
+class MyLinkedHashMap<K,V>{
+    final int numBuckets;
+    ArrayList<LinkedList1<K>> myBucketArray;
+
+    MyLinkedHashMap(){
+        this.numBuckets=10;
+        this.myBucketArray=new ArrayList<>(numBuckets);
+        for (int i=0;i<numBuckets;i++){
+            this.myBucketArray.add(null);
+        }
+    }
+
+   int getBucketIndex(K key){
+        int hashCode=Math.abs(key.hashCode());
+        int index=hashCode%numBuckets;
+
+        return index;
+    }
+
+    void add(K key ,V value){
+
+
+
+        int index=this.getBucketIndex(key);
+        LinkedList1<K> temp_list=this.myBucketArray.get(index);
+
+
+
+        if(temp_list==null){
+
+            temp_list=new LinkedList1<>();
+
+            this.myBucketArray.add(index,temp_list);
+
+        }
+
+
+        Node<K,V> newnode=(Node<K,V> )temp_list.search(key);
+
+        if(newnode==null){
+
+
+            newnode=new Node<K,V>(key,value);
+            temp_list.append(newnode);
+
+        }
+        else{
+            newnode.setValue(value);
+        }
+
+
+
+
+
+    }
+
+    public V get(K key){
+        int index=this.getBucketIndex(key);
+        LinkedList1<K> linkedList1=this.myBucketArray.get(index);
+        if(linkedList1==null){
+
+            return null;
+        }
+
+        Node<K,V> newnode= linkedList1.search(key);
+        return (newnode==null)?null:newnode.getValue();
+    }
+
+
+    @Override
+    public String toString() {
+        return "MyLinkedHashMap{" +
+                "numBuckets=" + numBuckets +
+                ", myBucketArray=" + myBucketArray +
                 '}';
     }
 }
@@ -140,21 +220,37 @@ class LinkedList1<K>{
 
                 '}';
     }
+
+
+
 }
 
 public class HashTable {
     public static void main(String[] args){
 
 
+
+
+
         String line="To be or not to be";
 
         String[] arr=line.toLowerCase().split(" ");
 
+        String line2="“Paranoids are not\n" +
+                "paranoid because they are paranoid but\n" +
+                "because they keep putting themselves\n" +
+                "deliberately into paranoid avoidable\n" +
+                "situations";
+        String[] arr1=line2.toLowerCase().split(" ");
+
+
+
+        MyLinkedHashMap<String,Integer> linkedHashMap=new MyLinkedHashMap();
         MyHashMap<String,Integer> hashMap1=new MyHashMap();
+
 
         for(String s:arr){
          Integer val= hashMap1.get(s);
-
 
            if(val==null){
 
@@ -170,11 +266,31 @@ public class HashTable {
 
         }
 
-        System.out.println(hashMap1.get("to"));
+        for(String s:arr1){
+            Integer val= linkedHashMap.get(s);
+
+            if(val==null){
+
+                val=1;
+
+
+            }
+            else{
+                val+=1;
+            }
+            linkedHashMap.add(s,val);
+
+
+        }
+
 
 
         System.out.println(hashMap1.toString());
+        System.out.println(linkedHashMap.toString());
+
+
 
     }
 }
+
 
