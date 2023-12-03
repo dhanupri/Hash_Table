@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 
 class Node<K,V> {
@@ -11,6 +12,7 @@ class Node<K,V> {
         this.value=value;
         this.next=null;
     }
+
 
     public K getKey() {
         return key;
@@ -45,41 +47,7 @@ class Node<K,V> {
                 '}';
     }
 }
-class MyHashMap<K,V> {
 
-    LinkedList1<K> linkedList1;
-
-    MyHashMap(){
-        this.linkedList1=new LinkedList1<>();
-    }
-
-    V get(K key){
-        Node<K,V> newnode=(Node<K, V>) this.linkedList1.search(key);
-       return  (newnode==null)?null:newnode.getValue();
-
-
-
-    }
-
-    void add(K key,V value){
-        Node<K,V> newnode=(Node<K, V>) this.linkedList1.search(key);
-        if(newnode==null){
-            newnode=new Node<>(key,value);
-            this.linkedList1.append(newnode);
-        }
-        else{
-            newnode.setValue(value);
-        }
-
-    }
-
-    @Override
-    public String toString() {
-        return "MyHashMap{" +
-                "linkedList1=" + linkedList1 +
-                '}';
-    }
-}
 class MyLinkedHashMap<K,V>{
     final int numBuckets;
     ArrayList<LinkedList1<K>> myBucketArray;
@@ -92,6 +60,8 @@ class MyLinkedHashMap<K,V>{
         }
     }
 
+
+
    int getBucketIndex(K key){
         int hashCode=Math.abs(key.hashCode());
         int index=hashCode%numBuckets;
@@ -101,48 +71,51 @@ class MyLinkedHashMap<K,V>{
 
     void add(K key ,V value){
 
-
-
         int index=this.getBucketIndex(key);
         LinkedList1<K> temp_list=this.myBucketArray.get(index);
 
-
-
         if(temp_list==null){
+
 
             temp_list=new LinkedList1<>();
 
-            this.myBucketArray.add(index,temp_list);
+            this.myBucketArray.set(index,temp_list);
+            Node<K,V> newnode=new Node<K,V>(key,value);
+
+
 
         }
 
 
         Node<K,V> newnode=(Node<K,V> )temp_list.search(key);
 
-        if(newnode==null){
 
+
+        if(newnode==null){
 
             newnode=new Node<K,V>(key,value);
             temp_list.append(newnode);
 
+
         }
         else{
             newnode.setValue(value);
+
         }
-
-
-
-
 
     }
 
     public V get(K key){
         int index=this.getBucketIndex(key);
+
         LinkedList1<K> linkedList1=this.myBucketArray.get(index);
+
         if(linkedList1==null){
+
 
             return null;
         }
+
 
         Node<K,V> newnode= linkedList1.search(key);
         return (newnode==null)?null:newnode.getValue();
@@ -156,13 +129,20 @@ class MyLinkedHashMap<K,V>{
     }
 
 
-    @Override
-    public String toString() {
-        return "MyLinkedHashMap{" +
-                "numBuckets=" + numBuckets +
-                ", myBucketArray=" + myBucketArray +
-                '}';
+    void display(){
+        for(LinkedList1<K> l1:myBucketArray){
+
+            if(l1==null){
+                continue;
+            }
+            else{
+                l1.diplay();
+            }
+        }
     }
+
+
+
 }
 class LinkedList1<K>{
 
@@ -175,59 +155,55 @@ class LinkedList1<K>{
         this.tail=null;
     }
 
-    void add(Node myNode){
-        if(this.tail==null){
-            this.tail=myNode;
-        }
 
-        if(this.head==null){
-            this.head=myNode;
-        }
-        else{
-            Node tempNode=this.head;
-            this.head=myNode;
-            this.head.setNext(tempNode);
-        }
+    void append(Node newnode){
 
+        if(head==null){
+            head=newnode;
 
-    }
-    void append(Node myNode){
-        if(this.head==null){
-            this.head=myNode;
+            return;
         }
+        int l=1;
 
-        if(this.tail==null){
-            this.tail=myNode;
+        Node temp=head;
+        while(temp.next!=null){
+            temp=temp.next;
+            l++;
         }
-        else{
-           this.tail.setNext(myNode);
-           this.tail=myNode;
-        }
+        temp.next=newnode;
 
 
     }
 
 
     Node search(K key){
-        Node tempNode=head;
-        while (tempNode!=null && tempNode.getNext()!=null){
-            if(tempNode.getKey().equals(key)){
-                return tempNode;
-            }
-            tempNode=tempNode.getNext();
+        Node temp=head;
+        while (temp!=null){
 
+            if(temp.getKey().equals(key)){
+
+                return temp;
+
+            }
+            temp=temp.next;
         }
         return null;
+
     }
 
-    @Override
-    public String toString() {
-        return "LinkedList1{" +
-                "head=" + head +
 
-                '}';
+
+
+
+    public void diplay() {
+
+        Node temp=head;
+
+        while (temp!=null){
+            System.out.println(temp.getKey()+"-"+temp.getValue());
+            temp=temp.next;
+        }
     }
-
 
 
 }
@@ -239,59 +215,33 @@ public class HashTable {
 
         String[] arr=line.toLowerCase().split(" ");
 
-        String line2="“Paranoids are not\n" +
-                "paranoid because they are paranoid but\n" +
-                "because they keep putting themselves\n" +
-                "deliberately into paranoid avoidable\n" +
-                "situations";
-        String[] arr1=line2.toLowerCase().split(" ");
-
-
 
         MyLinkedHashMap<String,Integer> linkedHashMap=new MyLinkedHashMap();
-        MyHashMap<String,Integer> hashMap1=new MyHashMap();
 
 
         for(String s:arr){
-         Integer val= hashMap1.get(s);
-
-           if(val==null){
-
-               val=1;
-
-
-           }
-           else{
-             val+=1;
-           }
-           hashMap1.add(s,val);
-
-
-        }
-
-        for(String s:arr1){
             Integer val= linkedHashMap.get(s);
+
 
             if(val==null){
 
                 val=1;
+                linkedHashMap.add(s,val);
+
 
 
             }
             else{
                 val+=1;
+                linkedHashMap.add(s,val);
+
+
             }
-            linkedHashMap.add(s,val);
 
 
         }
-        linkedHashMap.remove("are");
-
-
-
-
-        System.out.println(hashMap1.toString());
-        System.out.println(linkedHashMap.toString());
+       
+        linkedHashMap.display();
 
 
 
